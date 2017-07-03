@@ -8,70 +8,101 @@
   <name>Winkelwagen Web Application</name>
 
   <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.3.RELEASE</version>
-    <relativePath/> <!-- lookup parent from repository -->
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-parent</artifactId>
+      <version>1.5.3.RELEASE</version>
+      <relativePath/> <!-- lookup parent from repository -->
   </parent>
+
   <dependencies>
-    <dependency>
-      <groupId>nl.aalten.ng2boot</groupId>
-      <artifactId>frontend</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-jersey</artifactId>
-      <version>1.5.4.RELEASE</version>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-jersey2-jaxrs</artifactId>
-      <version>1.5.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.openjpa</groupId>
-      <artifactId>openjpa</artifactId>
-      <version>2.2.2</version>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.25</version>
-    </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-jersey</artifactId>
+        <version>1.5.4.RELEASE</version>
+      </dependency>
 
-    <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
-      <version>7.0</version>
-    </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.openjpa</groupId>
+        <artifactId>openjpa</artifactId>
+        <version>2.2.2</version>
+      </dependency>
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>5.1.25</version>
+      </dependency>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
+      <dependency>
+        <groupId>javax</groupId>
+        <artifactId>javaee-api</artifactId>
+        <version>7.0</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-jersey2-jaxrs</artifactId>
+        <version>1.5.3</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+      </dependency>
   </dependencies>
 
   <build>
     <plugins>
+        <!-- Compile to 1.8 level -->
         <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <target>1.8</target>
-            <source>1.8</source>
-          </configuration>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <target>1.8</target>
+                <source>1.8</source>
+            </configuration>
         </plugin>
+
+        <!-- Spring boot support -->
+
         <plugin>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-maven-plugin</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+
+        <!-- Ehance all JPA class for retrieving data from MySQL database -->
+
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>openjpa-maven-plugin</artifactId>
+            <version>1.0</version>
+            <configuration>
+                <includes>**/entities/*.class</includes>
+                <excludes>**/entities/XML*.class</excludes>
+                <addDefaultConstructor>true</addDefaultConstructor>
+                <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
+            </configuration>
+            <executions>
+                <execution><id>enhancer</id>
+                    <phase>process-classes</phase>
+                    <goals>
+                      <goal>enhance</goal>
+                    </goals>
+                  </execution>
+            </executions>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.openjpa</groupId>
+                    <artifactId>openjpa</artifactId>
+                    <!-- set the version to be the same as the level in your runtime -->
+                    <version>2.2.2</version>
+                  </dependency>
+            </dependencies>
         </plugin>
     </plugins>
   </build>
-
 
 </project>

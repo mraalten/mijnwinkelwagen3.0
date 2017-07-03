@@ -3,6 +3,7 @@ package nl.aalten.mijnwinkelwagen.application;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,13 +18,12 @@ import org.springframework.stereotype.Component;
 @Api
 public class ProduktenResource {
 
-//    private Repository repository;
+    private Repository repository;
 
-//    @Inject
-//    public ProduktenResource(Repository repository) {
-    public ProduktenResource() {
-//        this.repository = repository;
-//        System.out.println("** initialized resource!!! ** " + repository);
+    @Inject
+    public ProduktenResource(Repository repository) {
+        this.repository = new Repository();
+        System.out.println("** initialized resource!!! ** " + repository);
     }
 
     @GET
@@ -31,7 +31,7 @@ public class ProduktenResource {
     @Produces("application/json")
     public Response getProduktGroepen() {
         return Response
-            .ok(produktGroepen())
+            .ok(repository.getProduktGroepen())
             .header("Access-Control-Allow-Origin", "*")
             .build();
     }
